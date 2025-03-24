@@ -1,5 +1,5 @@
-// Hämta URL-parametrar
-function getUrlParams() {
+//hämtar alla parametrar från URL
+function getAllUrlParams() {
     const params = {};
     const queryString = window.location.search.substring(1);
     const pairs = queryString.split('&');
@@ -13,42 +13,41 @@ function getUrlParams() {
     return params;
 }
 
-// 1. Fyll i formulärfält med URL-parametrar
+//Extrahera och visa alla parametrar
+function displayAllParameters() {
+    const params = getAllUrlParams();
+    const parameterDisplay = document.getElementById('parameterDisplay');
+    
+    const allParameters = Object.entries(params).map(([key, value]) => {
+        return { parameter: key, value: value };
+    });
+
+    console.log("All URL Parameters:", JSON.stringify(allParameters, null, 2));
+    
+    if (parameterDisplay) {
+        parameterDisplay.innerHTML = `
+            <h3>URL Parameters Found:</h3>
+            <pre>${JSON.stringify(allParameters, null, 2)}</pre>
+        `;
+    }
+
+    return allParameters;
+}
+
+// Förfyll formulärfält från URL-parametrar
 function prefillFormFields() {
-    const params = getUrlParams();
-    const fieldMap = {
-        'name': 'name',
-        'email': 'email',
-        'phone': 'phone'
-    };
-
-    // Loop through all URL parameters
-    for (const [param, fieldId] of Object.entries(fieldMap)) {
-        if (params[param]) {
-            const field = document.getElementById(fieldId);
-            if (field) field.value = params[param];
+    const params = getAllUrlParams();
+    const fields = ['name', 'email', 'phone'];
+    
+    fields.forEach(field => {
+        if (params[field]) {
+            const element = document.getElementById(field);
+            if (element) element.value = params[field];
         }
-    }
+    });
 }
 
-//Hämta alla UTM-taggar från URL
-function parseAllUtmTags() {
-    const params = getUrlParams();
-    const utmTags = [];
-    
-    for (const [key, value] of Object.entries(params)) {
-        if (key.startsWith('utm_') || 
-            ['name', 'email', 'phone'].includes(key)) {
-            utmTags.push({ key, value });
-        }
-    }
-    
-    console.log("All UTM Tags:", utmTags);
-    return utmTags;
-}
-
-// Run both functions when page loads
 window.onload = function() {
     prefillFormFields();
-    parseAllUtmTags();
+    displayAllParameters();
 };
