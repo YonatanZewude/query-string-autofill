@@ -10,7 +10,6 @@ function getUrlParams() {
             params[key] = decodeURIComponent(value);
         }
     }
-
     return params;
 }
 
@@ -32,7 +31,7 @@ function prefillFormFields() {
     }
 }
 
-// 2. Hämta alla UTM-taggar från URL
+//Hämta alla UTM-taggar från URL
 function parseAllUtmTags() {
     const params = getUrlParams();
     const utmTags = [];
